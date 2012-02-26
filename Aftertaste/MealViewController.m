@@ -12,6 +12,14 @@
 @implementation MealViewController
 
 @synthesize model;
+@synthesize background = _background;
+
+- (void)setModel:(Meal *)value
+{
+    UIImage *image = [UIImage imageWithContentsOfFile:value.photo];
+    self.background.image = image;
+    self.model = model;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

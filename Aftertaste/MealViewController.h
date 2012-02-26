@@ -11,6 +11,9 @@
 @class Meal;
 
 @interface MealViewController : UIViewController
+{IBOutlet UIImageView *background;
+}
+@property (nonatomic, weak) UIImageView *background;
 
 @property (nonatomic, retain) Meal *model;
 @end
