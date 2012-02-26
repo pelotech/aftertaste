@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 #import "MasterViewController.h"
+#import "CameraViewController.h"
 
 @implementation AppDelegate
 
@@ -20,9 +21,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
-    controller.managedObjectContext = self.managedObjectContext;
+    CameraViewController *cameraViewController = (CameraViewController *)self.window.rootViewController;
+    cameraViewController.managedObjectContext = self.managedObjectContext;
     return YES;
 }
 							

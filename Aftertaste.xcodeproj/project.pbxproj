@@ -24,6 +24,10 @@
 		F9E0015914F9904A00E62366 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E0013514F9904A00E62366 /* CoreData.framework */; };
 		F9E0016114F9904A00E62366 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9E0015F14F9904A00E62366 /* InfoPlist.strings */; };
 		F9E0016414F9904A00E62366 /* AftertasteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E0016314F9904A00E62366 /* AftertasteTests.m */; };
+		F9E0017414F9939E00E62366 /* Meal.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E0017314F9939E00E62366 /* Meal.m */; };
+		F9E0017814F99BF200E62366 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E0017714F99BF200E62366 /* GalleryViewController.m */; };
+		F9E0017B14F9A11E00E62366 /* MealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E0017A14F9A11E00E62366 /* MealViewController.m */; };
+		F9E0017E14F9A1D600E62366 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E0017D14F9A1D600E62366 /* CameraViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +64,14 @@
 		F9E0016014F9904A00E62366 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F9E0016214F9904A00E62366 /* AftertasteTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AftertasteTests.h; sourceTree = "<group>"; };
 		F9E0016314F9904A00E62366 /* AftertasteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AftertasteTests.m; sourceTree = "<group>"; };
+		F9E0017214F9939E00E62366 /* Meal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Meal.h; path = "Data Model/Meal.h"; sourceTree = "<group>"; };
+		F9E0017314F9939E00E62366 /* Meal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Meal.m; path = "Data Model/Meal.m"; sourceTree = "<group>"; };
+		F9E0017614F99BF200E62366 /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
+		F9E0017714F99BF200E62366 /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
+		F9E0017914F9A11E00E62366 /* MealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealViewController.h; sourceTree = "<group>"; };
+		F9E0017A14F9A11E00E62366 /* MealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealViewController.m; sourceTree = "<group>"; };
+		F9E0017C14F9A1D600E62366 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		F9E0017D14F9A1D600E62366 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,13 +134,20 @@
 		F9E0013714F9904A00E62366 /* Aftertaste */ = {
 			isa = PBXGroup;
 			children = (
+				F9E0017514F993A700E62366 /* Data Model */,
 				F9E0014014F9904A00E62366 /* AppDelegate.h */,
 				F9E0014114F9904A00E62366 /* AppDelegate.m */,
 				F9E0014314F9904A00E62366 /* MainStoryboard.storyboard */,
+				F9E0017914F9A11E00E62366 /* MealViewController.h */,
+				F9E0017A14F9A11E00E62366 /* MealViewController.m */,
+				F9E0017614F99BF200E62366 /* GalleryViewController.h */,
+				F9E0017714F99BF200E62366 /* GalleryViewController.m */,
+				F9E0017C14F9A1D600E62366 /* CameraViewController.h */,
+				F9E0017D14F9A1D600E62366 /* CameraViewController.m */,
+				F9E0014D14F9904A00E62366 /* DetailViewController.m */,
 				F9E0014914F9904A00E62366 /* MasterViewController.h */,
 				F9E0014A14F9904A00E62366 /* MasterViewController.m */,
 				F9E0014C14F9904A00E62366 /* DetailViewController.h */,
-				F9E0014D14F9904A00E62366 /* DetailViewController.m */,
 				F9E0014614F9904A00E62366 /* Aftertaste.xcdatamodeld */,
 				F9E0013814F9904A00E62366 /* Supporting Files */,
 			);
@@ -163,6 +182,15 @@
 				F9E0015F14F9904A00E62366 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F9E0017514F993A700E62366 /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				F9E0017314F9939E00E62366 /* Meal.m */,
+				F9E0017214F9939E00E62366 /* Meal.h */,
+			);
+			name = "Data Model";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,6 +305,10 @@
 				F9E0014814F9904A00E62366 /* Aftertaste.xcdatamodeld in Sources */,
 				F9E0014B14F9904A00E62366 /* MasterViewController.m in Sources */,
 				F9E0014E14F9904A00E62366 /* DetailViewController.m in Sources */,
+				F9E0017414F9939E00E62366 /* Meal.m in Sources */,
+				F9E0017814F99BF200E62366 /* GalleryViewController.m in Sources */,
+				F9E0017B14F9A11E00E62366 /* MealViewController.m in Sources */,
+				F9E0017E14F9A1D600E62366 /* CameraViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +364,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Scott Nonnenberg (4KBSP827UL)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -347,6 +380,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PROVISIONING_PROFILE = "C234BBED-E44C-4279-973E-358D833380B0";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -446,6 +480,7 @@
 				F9E0016914F9904A00E62366 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F9E0016A14F9904A00E62366 /* Build configuration list for PBXNativeTarget "AftertasteTests" */ = {
 			isa = XCConfigurationList;
@@ -454,6 +489,7 @@
 				F9E0016C14F9904A00E62366 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
