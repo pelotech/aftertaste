@@ -7,8 +7,11 @@
 //
 
 #import "MealViewController.h"
+#import "Data Model/Meal.h"
 
 @implementation MealViewController
+
+@synthesize model;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

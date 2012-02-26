@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class Meal;
+
 @interface MealViewController : UIViewController
 
+@property (nonatomic, retain) Meal *model;
 @end

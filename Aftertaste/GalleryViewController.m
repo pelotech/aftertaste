@@ -12,31 +12,76 @@
 
 @implementation GalleryViewController
 
-@synthesize pageViewControllers;
+//@synthesize pageViewControllers;
+@synthesize pageViewController;
+@synthesize cameraViewController;
+@synthesize mealViewController;
 @synthesize managedObjectContext;
+@synthesize fetchedResultsController;
+@synthesize mutableFetchResults;
 //@synthesize delegate;
+
+- (void)fetchResults
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Meal"];
+//    fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:managedObjectContext];
+//    self performFetch
+    NSError *error = nil;
+    mutableFetchResults = [[managedObjectContext executeFetchRequest:request error:&error] mutableCopy];
+    NSLog(@"%@", mutableFetchResults);
+}
 
 - (void)viewDidLoad 
 {
-    CameraViewController *camera = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"CameraViewController"];
-    camera.managedObjectContext = self.managedObjectContext;
-    
-    pageViewControllers = [NSArray arrayWithObjects: camera, nil];
-    [self setViewControllers:pageViewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:NULL];
+    cameraViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"CameraViewController"];
+    cameraViewController.managedObjectContext = self.managedObjectContext;
 
+    mealViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
+    
+    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    
+    self.pageViewController.dataSource = self;
+    self.pageViewController.delegate = self;
+    
+    NSArray *pageViewControllers = [NSArray arrayWithObjects: cameraViewController, nil];
+    [pageViewController setViewControllers:pageViewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:NULL];
+    
+    [self addChildViewController:pageViewController];
+    [self.view addSubview:pageViewController.view];
+    [self fetchResults];
     
 }
 
+
+
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-    MealViewController *meal = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
-    return meal;
+    if(mutableFetchResults.count == 0) return nil;
+    if(viewController == cameraViewController){
+        mealViewController.model = [mutableFetchResults lastObject];
+    }
+    else{
+        NSUInteger index = [mutableFetchResults indexOfObject:mealViewController.model];
+        if (index == 0) return nil;
+        index--;
+        mealViewController.model = [mutableFetchResults objectAtIndex:index]; 
+    }
+    
+    return mealViewController;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-
+    if(viewController == cameraViewController) return nil;
+    else{
+        NSUInteger index = [mutableFetchResults indexOfObject:mealViewController.model];
+        index++;
+        if (index >= mutableFetchResults.count) return cameraViewController;
+        mealViewController.model = [mutableFetchResults objectAtIndex:index]; 
+    }
+    return mealViewController;
 }
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {

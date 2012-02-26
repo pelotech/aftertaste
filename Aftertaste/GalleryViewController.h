@@ -8,10 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GalleryViewController : UIPageViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
+@class CameraViewController;
+@class MealViewController;
+@interface GalleryViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
-@property (strong, nonatomic) NSArray *pageViewControllers;
+//@property (strong, nonatomic) NSArray *pageViewControllers;
+@property (strong, nonatomic) UIPageViewController *pageViewController;
+@property (nonatomic, strong) CameraViewController *cameraViewController;
+@property (nonatomic, strong) MealViewController *mealViewController;
+
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSMutableArray *mutableFetchResults;
+
 //@property (nonatomic, assign) id<UIPageViewControllerDelegate> delegate;
+
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController;
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController;
 
 @end
