@@ -13,14 +13,29 @@
 @implementation GalleryViewController
 
 @synthesize pageViewControllers;
+@synthesize managedObjectContext;
+//@synthesize delegate;
 
 - (void)viewDidLoad 
 {
-    MealViewController *meal = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
     CameraViewController *camera = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"CameraViewController"];
+    camera.managedObjectContext = self.managedObjectContext;
     
-    pageViewControllers = [NSArray arrayWithObjects: meal,camera, nil];
+    pageViewControllers = [NSArray arrayWithObjects: camera, nil];
     [self setViewControllers:pageViewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:NULL];
+
+    
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
+{
+    MealViewController *meal = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
+    return meal;
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
+{
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -31,11 +46,12 @@
 
 
 // GENERATED CODE
+//
 //- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 //{
 //    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 //    if (self) {
-//        // Custom initialization
+//        // custom setup
 //    }
 //    return self;
 //}

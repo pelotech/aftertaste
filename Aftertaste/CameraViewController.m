@@ -34,6 +34,7 @@
     meal.photo = imagePath;
     
     [appDelegate saveContext];
+    [picker dismissModalViewControllerAnimated:YES];
 }
 
 
@@ -91,7 +92,6 @@
 - (IBAction)takePicture:(id)sender {
     UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
     cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
-    cameraUI.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
     cameraUI.allowsEditing = NO;
     cameraUI.delegate = self;
     

@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 
 #import "MasterViewController.h"
-#import "CameraViewController.h"
+#import "GalleryViewController.h"
 
 @implementation AppDelegate
 
@@ -21,8 +21,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    CameraViewController *cameraViewController = (CameraViewController *)self.window.rootViewController;
-    cameraViewController.managedObjectContext = self.managedObjectContext;
+    GalleryViewController *galleryViewController = (GalleryViewController *)self.window.rootViewController;
+    galleryViewController.managedObjectContext = self.managedObjectContext;
     return YES;
 }
 							

@@ -11,5 +11,7 @@
 @interface GalleryViewController : UIPageViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
 @property (strong, nonatomic) NSArray *pageViewControllers;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+//@property (nonatomic, assign) id<UIPageViewControllerDelegate> delegate;
 
 @end
