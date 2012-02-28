@@ -9,17 +9,21 @@
 #import "RateMealViewController.h"
 #import "Meal.h"
 #import "AppDelegate.h"
+#import "RateMealViewController.h"
 
 @implementation RateMealViewController
 
-@synthesize model = _model;
 @synthesize appDelegate;
+@synthesize rateButtons;
+@synthesize handler;
 
-- (void)setModel:(Meal *)value
+- (IBAction)rate:(id)sender
 {
-    NSLog(@"MealViewController::setModel");
+    if (handler) {
+        handler([rateButtons selectedSegmentIndex] + 1);
+    }
     
-    _model = value;
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark - View lifecycle
@@ -31,6 +35,7 @@
 
 - (void)viewDidUnload
 {
+    [self setRateButtons:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

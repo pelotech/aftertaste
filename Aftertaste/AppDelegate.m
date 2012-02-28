@@ -133,6 +133,24 @@
     return __persistentStoreCoordinator;
 }
 
+#pragma mark - Time-related functions
+
++ (NSDate *)offsetDate:(NSDate *)date byHours:(int)hours
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *offset = [[NSDateComponents alloc] init];
+    [offset setHour:hours];
+    return [calendar dateByAddingComponents:offset toDate:date options:0];
+}
+
++ (NSDate *)offsetDate:(NSDate *)date byMinutes:(int)minutes
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *offset = [[NSDateComponents alloc] init];
+    [offset setMinute:minutes];
+    return [calendar dateByAddingComponents:offset toDate:date options:0];
+}
+
 #pragma mark - Application's Documents directory
 
 - (NSURL *)applicationDocumentsDirectory

@@ -10,6 +10,7 @@
 
 @class CameraViewController;
 @class MealViewController;
+@class AppDelegate;
 
 @interface GalleryViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate, NSFetchedResultsControllerDelegate>
 
@@ -17,6 +18,7 @@
 @property (nonatomic, strong) CameraViewController *cameraViewController;
 @property (nonatomic, strong) MealViewController *mealViewController1;
 @property (nonatomic, strong) MealViewController *mealViewController2;
+@property (nonatomic, strong) AppDelegate *appDelegate;
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;

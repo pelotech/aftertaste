@@ -14,6 +14,11 @@
 @interface RateMealViewController : UIViewController
 
 @property (nonatomic, retain) AppDelegate *appDelegate;
-@property (nonatomic, retain) Meal *model;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *rateButtons;
+
+typedef void (^RatingHandler)(int);
+@property (nonatomic, copy) RatingHandler handler;
+
+- (IBAction)rate:(id)sender;
 
 @end

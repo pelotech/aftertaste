@@ -53,7 +53,28 @@
     NSData *data = UIImageJPEGRepresentation(smallImage, .85);    
     NSString *path = [[[appDelegate applicationDocumentsDirectory] path] stringByAppendingPathComponent:filename];
     [data writeToFile:path atomically:YES];  
-}                  
+}           
+
+- (void)scheduleNotification:(NSDate *)date
+{
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    if (!notification)
+    {
+        NSLog(@"AppDelegate::scheduleReminders: Couldn't create a local notification");
+        return;
+    }
+    
+    notification.fireDate = [AppDelegate offsetDate:date byHours:2];
+    notification.timeZone = [NSTimeZone defaultTimeZone];
+    
+    notification.alertBody = @"You ate two hours ago - rate how you feel now!";
+    notification.alertAction = @"Rate!";
+    
+    notification.soundName = UILocalNotificationDefaultSoundName;
+    notification.applicationIconBadgeNumber = 1;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];            
+}
                   
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
@@ -61,6 +82,7 @@
     
     [self savePhoto:[info valueForKey:UIImagePickerControllerOriginalImage] toFilename:filename];
     [self saveMeal:filename];
+    [self scheduleNotification:[NSDate date]];
     
     [picker dismissModalViewControllerAnimated:YES];
 }

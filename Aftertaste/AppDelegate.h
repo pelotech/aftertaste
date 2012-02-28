@@ -18,6 +18,9 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+
 + (void)logError:(NSError *)error;
++ (NSDate *)offsetDate:(NSDate *)date byHours:(int)hours;
++ (NSDate *)offsetDate:(NSDate *)date byMinutes:(int)minutes;
 
 @end

@@ -10,6 +10,8 @@
 #import "MealViewController.h"
 #import "CameraViewController.h"
 #import "AppDelegate.h"
+#import "RateMealViewController.h"
+#import "Meal.h"
 
 @implementation GalleryViewController
 
@@ -17,9 +19,44 @@
 @synthesize cameraViewController;
 @synthesize mealViewController1;
 @synthesize mealViewController2;
+@synthesize appDelegate;
 
 @synthesize managedObjectContext;
 @synthesize fetchedResultsController;
+
+- (void)viewDidAppear:(BOOL)animated
+{    
+    NSDate *end = [AppDelegate offsetDate:[NSDate date] byHours:-2];
+    NSDate *begin = [AppDelegate offsetDate:end byMinutes:-15];
+    
+    NSMutableArray *inWindow = [NSMutableArray array];
+    
+    for (int index = self.total - 1; index >= 0; index--) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
+        Meal *meal = [fetchedResultsController  objectAtIndexPath:path];
+        
+        if ([begin compare:meal.timeStamp] == NSOrderedDescending) break;
+        
+        if ([begin compare:meal.timeStamp] == NSOrderedAscending
+            && [end compare:meal.timeStamp] == NSOrderedDescending
+            && [meal.rating intValue] == 0) {
+            [inWindow addObject:meal];
+        }
+    }
+
+    if ([inWindow count] > 0) {
+        RateMealViewController *rateMealViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"RateMealViewController"];
+        rateMealViewController.handler = ^(int rating) {
+            [inWindow enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                Meal* meal = (Meal *)obj;
+                meal.rating = [NSNumber numberWithInt:rating];
+            }];
+            [appDelegate saveContext];
+        };
+        
+        [self presentModalViewController:rateMealViewController animated:YES];
+    }
+}
 
 - (int)total
 {
