@@ -84,11 +84,12 @@
     mealViewController2 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
     
     self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    self.pageViewController.view.bounds = self.view.bounds;
     
     self.pageViewController.dataSource = self;
     self.pageViewController.delegate = self;
     
-    NSArray *pageViewControllers = [NSArray arrayWithObjects: cameraViewController, nil];
+    NSArray *pageViewControllers = [NSArray arrayWithObjects:cameraViewController, nil];
     [pageViewController setViewControllers:pageViewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:NULL];
     
     [self addChildViewController:pageViewController];

@@ -1,50 +1,32 @@
 //
-//  MealViewController.m
+//  RateMealViewController.m
 //  Aftertaste
 //
-//  Created by Scott Nonnenberg on 2/25/12.
+//  Created by Scott Nonnenberg on 2/27/12.
 //  Copyright (c) 2012 Liffft. All rights reserved.
 //
 
-#import "MealViewController.h"
-#import "Data Model/Meal.h"
+#import "RateMealViewController.h"
+#import "Meal.h"
 #import "AppDelegate.h"
 
-@implementation MealViewController
+@implementation RateMealViewController
 
 @synthesize model = _model;
-@synthesize background = _background;
 @synthesize appDelegate;
-
-- (void)loadImage:(NSString *)filename
-{
-    NSString *path = [[[appDelegate applicationDocumentsDirectory] path] stringByAppendingPathComponent:filename];
-    UIImage *image = [UIImage imageWithContentsOfFile:path];
-    self.background.image = image;
-}
 
 - (void)setModel:(Meal *)value
 {
     NSLog(@"MealViewController::setModel");
-    [self loadImage:value.photo];
     
     _model = value;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    NSLog(@"MealViewController::viewWillAppear");
-    
-    [self loadImage:self.model.photo];
-    [super viewWillAppear:animated];
 }
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
-    NSLog(@"MealViewController::viewDidLoad");
-    appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [super viewDidLoad];
 }
 
 - (void)viewDidUnload

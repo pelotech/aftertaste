@@ -30,6 +30,9 @@
     // Override point for customization after application launch.
     GalleryViewController *galleryViewController = (GalleryViewController *)self.window.rootViewController;
     galleryViewController.managedObjectContext = self.managedObjectContext;
+    
+    [application setStatusBarHidden:YES];
+    
     return YES;
 }
 							
