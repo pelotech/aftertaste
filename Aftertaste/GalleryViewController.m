@@ -9,34 +9,79 @@
 #import "GalleryViewController.h"
 #import "MealViewController.h"
 #import "CameraViewController.h"
+#import "AppDelegate.h"
 
 @implementation GalleryViewController
 
-//@synthesize pageViewControllers;
 @synthesize pageViewController;
 @synthesize cameraViewController;
-@synthesize mealViewController;
+@synthesize mealViewController1;
+@synthesize mealViewController2;
+
 @synthesize managedObjectContext;
 @synthesize fetchedResultsController;
-@synthesize mutableFetchResults;
-//@synthesize delegate;
 
-- (void)fetchResults
+- (int)total
 {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Meal"];
-//    fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:managedObjectContext];
-//    self performFetch
-    NSError *error = nil;
-    mutableFetchResults = [[managedObjectContext executeFetchRequest:request error:&error] mutableCopy];
-    NSLog(@"%@", mutableFetchResults);
+    NSLog(@"GalleryViewController:getTotal");
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:0];
+    return [sectionInfo numberOfObjects];
 }
 
+- (void)initFetchedResultsController
+{
+    NSLog(@"GalleryViewController:initFetchedResultsController");
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Meal" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];   
+    [fetchRequest setFetchBatchSize:10];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
+    [fetchRequest setSortDescriptors:sortDescriptors];
+     
+    fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
+    fetchedResultsController.delegate = self;
+    
+	NSError *error = nil;
+	if (![fetchedResultsController performFetch:&error])
+    {
+        [AppDelegate logError:error];
+	}    
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    NSLog(@"GalleryViewController:controllerWillChangeContent");
+}
+ 
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    NSLog(@"GalleryViewController:didChangeSection - %d", type);
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+    atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+    newIndexPath:(NSIndexPath *)newIndexPath
+{
+    NSLog(@"GalleryViewController:didChangeObject - %d", type);
+}
+ 
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    NSLog(@"GalleryViewController:controllerDidChangeContent");
+}
+                                                       
 - (void)viewDidLoad 
 {
+    NSLog(@"GalleryViewController:viewDidLoad");
+    
     cameraViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"CameraViewController"];
     cameraViewController.managedObjectContext = self.managedObjectContext;
 
-    mealViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
+    mealViewController1 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
+    mealViewController2 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
     
     self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     
@@ -48,38 +93,77 @@
     
     [self addChildViewController:pageViewController];
     [self.view addSubview:pageViewController.view];
-    [self fetchResults];
-    
+    [self initFetchedResultsController];
 }
-
-
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-    if(mutableFetchResults.count == 0) return nil;
-    if(viewController == cameraViewController){
-        mealViewController.model = [mutableFetchResults lastObject];
+    NSLog(@"GalleryViewController:viewControllerBeforeViewController");
+    
+    MealViewController *result;
+    int index;         
+    
+    if (viewController == cameraViewController) {
+        result = mealViewController1;
+        index = self.total - 1;
     }
-    else{
-        NSUInteger index = [mutableFetchResults indexOfObject:mealViewController.model];
-        if (index == 0) return nil;
+    else {
+        if (viewController == mealViewController1) {
+            result = mealViewController2;
+        }
+        else {
+            result = mealViewController1;
+        }
+        MealViewController *mvc = (MealViewController *)viewController;
+        Meal *meal = mvc.model;
+        index = [fetchedResultsController indexPathForObject:meal].row;
         index--;
-        mealViewController.model = [mutableFetchResults objectAtIndex:index]; 
     }
     
-    return mealViewController;
+    if (index >= 0) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
+        id model = [fetchedResultsController objectAtIndexPath:path];
+        result.model = model;
+    }
+    else {
+        result = nil;
+    }
+    
+    return result;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-    if(viewController == cameraViewController) return nil;
-    else{
-        NSUInteger index = [mutableFetchResults indexOfObject:mealViewController.model];
+    NSLog(@"GalleryViewController:viewControllerAfterViewController");
+    
+    UIViewController *result;
+    int index;
+    
+    if (viewController == cameraViewController) result = nil;
+    else {
+        if (viewController == mealViewController1) {
+            result = mealViewController2;
+        }
+        else {
+            result = mealViewController1;
+        }
+        MealViewController *mvc = (MealViewController *)viewController;
+        Meal *meal = mvc.model;
+        index = [fetchedResultsController indexPathForObject:meal].row;
         index++;
-        if (index >= mutableFetchResults.count) return cameraViewController;
-        mealViewController.model = [mutableFetchResults objectAtIndex:index]; 
+    
+        if (index >= self.total) {
+            result = cameraViewController;
+        }
+        else
+        {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
+            id model = [fetchedResultsController objectAtIndexPath:path];
+            ((MealViewController *)result).model = model;
+        }
     }
-    return mealViewController;
+       
+    return result;
 }
 
 

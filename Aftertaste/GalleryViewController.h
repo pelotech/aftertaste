@@ -10,22 +10,16 @@
 
 @class CameraViewController;
 @class MealViewController;
-@interface GalleryViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
-//@property (strong, nonatomic) NSArray *pageViewControllers;
+@interface GalleryViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate, NSFetchedResultsControllerDelegate>
+
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (nonatomic, strong) CameraViewController *cameraViewController;
-@property (nonatomic, strong) MealViewController *mealViewController;
+@property (nonatomic, strong) MealViewController *mealViewController1;
+@property (nonatomic, strong) MealViewController *mealViewController2;
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, strong) NSMutableArray *mutableFetchResults;
-
-//@property (nonatomic, assign) id<UIPageViewControllerDelegate> delegate;
-
-
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController;
-
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController;
+@property (nonatomic, readonly) int total;
 
 @end

@@ -15,66 +15,78 @@
 @synthesize managedObjectContext;
 @synthesize appDelegate;
 
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    Meal *meal = (Meal *)[NSEntityDescription insertNewObjectForEntityForName:@"Meal" inManagedObjectContext:managedObjectContext];
-    meal.timeStamp = [NSDate date]; 
++ (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)size;
+{
+    UIGraphicsBeginImageContext(size);
     
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    dateFormat.dateFormat = @"yMMMd-h.mm.s";
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
     
-    NSString *imgFileName = [dateFormat stringFromDate:meal.timeStamp];
+    UIGraphicsEndImageContext();
     
-    NSData *savedImage = UIImageJPEGRepresentation(image, .85);
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *imagePath = [documentsDirectory stringByAppendingPathComponent:imgFileName];
+    return result;
+}
 
-    [savedImage writeToFile:imagePath atomically:YES];
-    meal.photo = imagePath;
+- (NSString *)getFilename:(NSDate *)timeStamp
+{
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yMMMd-h.mm.s.'jpeg'";
+    
+    NSString *filename = [dateFormat stringFromDate:timeStamp];
+    return filename;
+}
+
+- (void)saveMeal:(NSString *)filename
+{
+    Meal *meal = (Meal *)[NSEntityDescription insertNewObjectForEntityForName:@"Meal" inManagedObjectContext:managedObjectContext];
+    
+    meal.timeStamp = [NSDate date]; 
+    meal.photo = filename;  
     
     [appDelegate saveContext];
+}
+
+- (void)savePhoto:(UIImage *)image toFilename:(NSString *)filename
+{
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    UIImage *smallImage = [CameraViewController imageWithImage:image scaledToSize:screenSize];
+    NSData *data = UIImageJPEGRepresentation(smallImage, .85);    
+    NSString *path = [[[appDelegate applicationDocumentsDirectory] path] stringByAppendingPathComponent:filename];
+    [data writeToFile:path atomically:YES];  
+}                  
+                  
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSString *filename = [self getFilename:[NSDate date]];
+    
+    [self savePhoto:[info valueForKey:UIImagePickerControllerOriginalImage] toFilename:filename];
+    [self saveMeal:filename];
+    
     [picker dismissModalViewControllerAnimated:YES];
 }
 
-
-- (void) viewDidLoad {
-    appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (IBAction)takePicture:(id)sender
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
+    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+    cameraUI.allowsEditing = NO;
+    cameraUI.delegate = self;
     
-    // Release any cached data, images, etc that aren't in use.
+    #if TARGET_IPHONE_SIMULATOR
+        dispatch_async( dispatch_get_main_queue(), ^{
+            // can put some code here which will save a photo, replicating camera
+        });
+    #else
+        [self presentModalViewController:cameraUI animated:YES];
+    #endif
 }
 
 #pragma mark - View lifecycle
 
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView
+- (void) viewDidLoad
 {
+    appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
-*/
-
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-*/
 
 - (void)viewDidUnload
 {
@@ -89,13 +101,11 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (IBAction)takePicture:(id)sender {
-    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
-    cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
-    cameraUI.allowsEditing = NO;
-    cameraUI.delegate = self;
+- (void)didReceiveMemoryWarning
+{
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
     
-    [self presentModalViewController:cameraUI animated:YES];
-    
+    // Release any cached data, images, etc that aren't in use.
 }
 @end

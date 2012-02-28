@@ -16,8 +16,6 @@
 		F9E0014214F9904A00E62366 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E0014114F9904A00E62366 /* AppDelegate.m */; };
 		F9E0014514F9904A00E62366 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9E0014314F9904A00E62366 /* MainStoryboard.storyboard */; };
 		F9E0014814F9904A00E62366 /* Aftertaste.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F9E0014614F9904A00E62366 /* Aftertaste.xcdatamodeld */; };
-		F9E0014B14F9904A00E62366 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E0014A14F9904A00E62366 /* MasterViewController.m */; };
-		F9E0014E14F9904A00E62366 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E0014D14F9904A00E62366 /* DetailViewController.m */; };
 		F9E0015614F9904A00E62366 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E0015514F9904A00E62366 /* SenTestingKit.framework */; };
 		F9E0015714F9904A00E62366 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E0012F14F9904A00E62366 /* UIKit.framework */; };
 		F9E0015814F9904A00E62366 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E0013114F9904A00E62366 /* Foundation.framework */; };
@@ -54,10 +52,6 @@
 		F9E0014114F9904A00E62366 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F9E0014414F9904A00E62366 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		F9E0014714F9904A00E62366 /* Aftertaste.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Aftertaste.xcdatamodel; sourceTree = "<group>"; };
-		F9E0014914F9904A00E62366 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		F9E0014A14F9904A00E62366 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		F9E0014C14F9904A00E62366 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		F9E0014D14F9904A00E62366 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		F9E0015414F9904A00E62366 /* AftertasteTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AftertasteTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9E0015514F9904A00E62366 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		F9E0015E14F9904A00E62366 /* AftertasteTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AftertasteTests-Info.plist"; sourceTree = "<group>"; };
@@ -134,7 +128,6 @@
 		F9E0013714F9904A00E62366 /* Aftertaste */ = {
 			isa = PBXGroup;
 			children = (
-				F9E0017514F993A700E62366 /* Data Model */,
 				F9E0014014F9904A00E62366 /* AppDelegate.h */,
 				F9E0014114F9904A00E62366 /* AppDelegate.m */,
 				F9E0014314F9904A00E62366 /* MainStoryboard.storyboard */,
@@ -144,11 +137,7 @@
 				F9E0017714F99BF200E62366 /* GalleryViewController.m */,
 				F9E0017C14F9A1D600E62366 /* CameraViewController.h */,
 				F9E0017D14F9A1D600E62366 /* CameraViewController.m */,
-				F9E0014D14F9904A00E62366 /* DetailViewController.m */,
-				F9E0014914F9904A00E62366 /* MasterViewController.h */,
-				F9E0014A14F9904A00E62366 /* MasterViewController.m */,
-				F9E0014C14F9904A00E62366 /* DetailViewController.h */,
-				F9E0014614F9904A00E62366 /* Aftertaste.xcdatamodeld */,
+				F9E0017514F993A700E62366 /* Data Model */,
 				F9E0013814F9904A00E62366 /* Supporting Files */,
 			);
 			path = Aftertaste;
@@ -187,6 +176,7 @@
 		F9E0017514F993A700E62366 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
+				F9E0014614F9904A00E62366 /* Aftertaste.xcdatamodeld */,
 				F9E0017314F9939E00E62366 /* Meal.m */,
 				F9E0017214F9939E00E62366 /* Meal.h */,
 			);
@@ -303,8 +293,6 @@
 				F9E0013E14F9904A00E62366 /* main.m in Sources */,
 				F9E0014214F9904A00E62366 /* AppDelegate.m in Sources */,
 				F9E0014814F9904A00E62366 /* Aftertaste.xcdatamodeld in Sources */,
-				F9E0014B14F9904A00E62366 /* MasterViewController.m in Sources */,
-				F9E0014E14F9904A00E62366 /* DetailViewController.m in Sources */,
 				F9E0017414F9939E00E62366 /* Meal.m in Sources */,
 				F9E0017814F99BF200E62366 /* GalleryViewController.m in Sources */,
 				F9E0017B14F9A11E00E62366 /* MealViewController.m in Sources */,
