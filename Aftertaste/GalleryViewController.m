@@ -24,8 +24,8 @@
 @synthesize managedObjectContext;
 @synthesize fetchedResultsController;
 
-- (void)viewDidAppear:(BOOL)animated
-{    
+- (void)askForRatingIfNeeded
+{
     NSDate *end = [AppDelegate offsetDate:[NSDate date] byHours:-2];
     NSDate *begin = [AppDelegate offsetDate:end byMinutes:-15];
     
@@ -43,7 +43,7 @@
             [inWindow addObject:meal];
         }
     }
-
+    
     if ([inWindow count] > 0) {
         RateMealViewController *rateMealViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"RateMealViewController"];
         rateMealViewController.handler = ^(int rating) {
@@ -56,6 +56,11 @@
         
         [self presentModalViewController:rateMealViewController animated:YES];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{    
+    [self askForRatingIfNeeded];
 }
 
 - (int)total
@@ -92,46 +97,20 @@
 {
     NSLog(@"GalleryViewController:controllerWillChangeContent");
 }
- 
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
     NSLog(@"GalleryViewController:didChangeSection - %d", type);
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-    atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-    newIndexPath:(NSIndexPath *)newIndexPath
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
     NSLog(@"GalleryViewController:didChangeObject - %d", type);
 }
- 
+
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     NSLog(@"GalleryViewController:controllerDidChangeContent");
-}
-                                                       
-- (void)viewDidLoad 
-{
-    NSLog(@"GalleryViewController:viewDidLoad");
-    
-    cameraViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"CameraViewController"];
-    cameraViewController.managedObjectContext = self.managedObjectContext;
-
-    mealViewController1 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
-    mealViewController2 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
-    
-    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
-    self.pageViewController.view.bounds = self.view.bounds;
-    
-    self.pageViewController.dataSource = self;
-    self.pageViewController.delegate = self;
-    
-    NSArray *pageViewControllers = [NSArray arrayWithObjects:cameraViewController, nil];
-    [pageViewController setViewControllers:pageViewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:NULL];
-    
-    [self addChildViewController:pageViewController];
-    [self.view addSubview:pageViewController.view];
-    [self initFetchedResultsController];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
@@ -204,61 +183,94 @@
     return result;
 }
 
+- (void)flipToCamera
+{
+    NSLog(@"GalleryViewController:flipToCamera");    
+    UIViewController *controller = [pageViewController.viewControllers objectAtIndex:0];
+
+    if (controller != cameraViewController) {
+        NSArray *viewControllers = [NSArray arrayWithObjects:cameraViewController, nil];
+        [pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
+    }
+}
+
+- (void)flipToLastImage
+{
+    NSLog(@"GalleryViewController:flipToLastImage");
+    int index = self.total - 1;
+    NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
+    Meal *meal = (Meal *)[fetchedResultsController objectAtIndexPath:path];
+    mealViewController1.model = meal;
+    
+    NSArray *viewControllers = [NSArray arrayWithObjects:mealViewController1, nil];
+    [pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionReverse animated:YES completion:NULL];
+   
+}
+
+- (void)applicationDidBecomeActive
+{
+    NSLog(@"GalleryViewController:applicationDidBecomeActive");
+    [self flipToCamera];
+    [self askForRatingIfNeeded];
+}
+
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad 
+{
+    NSLog(@"GalleryViewController:viewDidLoad");
+ 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];  
+    
+    cameraViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"CameraViewController"];
+    cameraViewController.managedObjectContext = self.managedObjectContext;
+    cameraViewController.galleryViewController = self;
+    
+    mealViewController1 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
+    mealViewController2 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
+    
+    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    self.pageViewController.view.bounds = self.view.bounds;
+    
+    self.pageViewController.dataSource = self;
+    self.pageViewController.delegate = self;
+    
+    NSArray *pageViewControllers = [NSArray arrayWithObjects:cameraViewController, nil];
+    [pageViewController setViewControllers:pageViewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:NULL];
+    
+    [self addChildViewController:pageViewController];
+    [self.view addSubview:pageViewController.view];
+    [self initFetchedResultsController];
+}
+
+- (void)viewDidUnload
+{
+    [self setPageViewController:nil];
+    [self setCameraViewController:nil];
+    [self setMealViewController1:nil];
+    [self setMealViewController2:nil];
+    [self setAppDelegate:nil];
+
+    [self setManagedObjectContext:nil];
+    [self setFetchedResultsController:nil];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [super viewDidUnload];
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation != UIInterfaceOrientationPortrait);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-
-// GENERATED CODE
-//
-//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-//{
-//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-//    if (self) {
-//        // custom setup
-//    }
-//    return self;
-//}
-//
-//- (void)didReceiveMemoryWarning
-//{
-//    // Releases the view if it doesn't have a superview.
-//    [super didReceiveMemoryWarning];
-//    
-//    // Release any cached data, images, etc that aren't in use.
-//}
-//
-//#pragma mark - View lifecycle
-//
-///*
-//// Implement loadView to create a view hierarchy programmatically, without using a nib.
-//- (void)loadView
-//{
-//}
-//*/
-//
-///*
-//// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-//- (void)viewDidLoad
-//{
-//    [super viewDidLoad];
-//}
-//*/
-//
-//- (void)viewDidUnload
-//{
-//    [super viewDidUnload];
-//    // Release any retained subviews of the main view.
-//    // e.g. self.myOutlet = nil;
-//}
-//
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-//{
-//    // Return YES for supported orientations
-//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-//}
+- (void)didReceiveMemoryWarning
+{
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc that aren't in use.
+}
 
 @end

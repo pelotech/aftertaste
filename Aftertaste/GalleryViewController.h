@@ -24,4 +24,8 @@
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, readonly) int total;
 
+- (void)applicationDidBecomeActive;
+- (void)flipToCamera;
+- (void)flipToLastImage;
+
 @end

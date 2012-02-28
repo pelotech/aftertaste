@@ -9,11 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @class AppDelegate;
+@class GalleryViewController;
 
 @interface CameraViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) AppDelegate *appDelegate;
+@property (nonatomic, weak) GalleryViewController *galleryViewController;
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
 
 - (IBAction)takePicture:(id)sender;
 
