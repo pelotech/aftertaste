@@ -210,8 +210,12 @@
 - (void)applicationDidBecomeActive
 {
     NSLog(@"GalleryViewController:applicationDidBecomeActive");
-    [self flipToCamera];
     [self askForRatingIfNeeded];
+}
+
+- (void)applicationWillResignActive
+{
+    [self flipToCamera];
 }
 
 #pragma mark - View lifecycle
@@ -221,6 +225,7 @@
     NSLog(@"GalleryViewController:viewDidLoad");
  
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];  
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];  
     
     cameraViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"CameraViewController"];
     cameraViewController.managedObjectContext = self.managedObjectContext;

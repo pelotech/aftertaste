@@ -25,6 +25,7 @@
 @property (nonatomic, readonly) int total;
 
 - (void)applicationDidBecomeActive;
+- (void)applicationWillResignActive;
 - (void)flipToCamera;
 - (void)flipToLastImage;
 
