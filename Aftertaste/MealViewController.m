@@ -18,6 +18,8 @@
 
 - (void)loadImage:(NSString *)filename
 {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     NSString *path = [[[appDelegate applicationDocumentsDirectory] path] stringByAppendingPathComponent:filename];
     UIImage *image = [UIImage imageWithContentsOfFile:path];
     self.background.image = image;
@@ -25,7 +27,8 @@
 
 - (void)setModel:(Meal *)value
 {
-    NSLog(@"MealViewController::setModel");
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     [self loadImage:value.photo];
     
     _model = value;
@@ -33,7 +36,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"MealViewController::viewWillAppear");
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     [self loadImage:self.model.photo];
     [super viewWillAppear:animated];
@@ -43,7 +46,8 @@
 
 - (void)viewDidLoad
 {
-    NSLog(@"MealViewController::viewDidLoad");
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 

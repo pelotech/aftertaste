@@ -10,6 +10,7 @@
 #import "Meal.h"
 #import "AppDelegate.h"
 #import "GalleryViewController.h"
+#import "Constants.h"
 
 @implementation CameraViewController
 
@@ -95,10 +96,9 @@
     
     [picker dismissModalViewControllerAnimated:YES];
 
-    int nanoseconds_per_sec = 1000000000;
-    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 0.5 * nanoseconds_per_sec);
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NANOSECONDS_PER_SECOND);
     dispatch_after(time, dispatch_get_main_queue(), ^(void){
-        [galleryViewController flipToLastImage];
+        [galleryViewController flipToLastImage:YES];
     });
 }
 
@@ -122,10 +122,12 @@
     NSLog(@"CameraViewController:viewDidLoad");
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
+#ifdef TARGET_IPHONE_SIMULATOR
     imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     imagePicker.allowsEditing = NO;
     imagePicker.delegate = self;
+#endif
 }
 
 - (void)viewDidUnload

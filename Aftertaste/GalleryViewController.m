@@ -13,16 +13,82 @@
 #import "RateMealViewController.h"
 #import "Meal.h"
 
+int CACHED_MEAL_VIEW_CONTROLLERS = 3;
+
 @implementation GalleryViewController
 
-@synthesize pageViewController;
+@synthesize scrollView;
+
 @synthesize cameraViewController;
-@synthesize mealViewController1;
-@synthesize mealViewController2;
+@synthesize mealViewControllers;
 @synthesize appDelegate;
 
 @synthesize managedObjectContext;
 @synthesize fetchedResultsController;
+
+@synthesize currentIndex;
+
+- (void)scrollViewDidScroll:(UIScrollView *)providedScrollView
+{    
+    int index = scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    if (index != currentIndex) {
+        [self setUpForIndex:index previousIndex:currentIndex];
+        currentIndex = index;
+    }
+}
+
+- (void)moveViewToIndex:(int)index
+{
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
+    NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
+    Meal *meal = (Meal *)[fetchedResultsController objectAtIndexPath:path];
+    MealViewController *mealViewController = [mealViewControllers objectAtIndex:index % 3];
+
+    mealViewController.model = meal;
+    
+    CGRect rect = mealViewController.view.frame;
+    rect.origin.y = 0;
+    rect.origin.x = rect.size.width * index;
+    mealViewController.view.frame = rect;
+}
+
+- (void)setUpForIndex:(int)index previousIndex:(int)previousIndex
+{
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"index: %d", index);
+#endif
+    if (index < previousIndex && index - 1 >= 0) {
+        [self moveViewToIndex:index - 1];
+    }
+    
+    if (index > previousIndex && index + 1 < [self getTotalMeals]) {
+        [self moveViewToIndex:index + 1];
+    }
+}
+
+
+- (void)moveToIndex:(int)index animated:(BOOL)animated
+{
+    if (index - 1 >= 0) {
+        [self moveViewToIndex:index - 1];
+    }
+        
+    if (index >= 0 && index < [self getTotalMeals]) {
+        [self moveViewToIndex:index];
+    }
+    
+    if (index + 1 < [self getTotalMeals]) {
+        [self moveViewToIndex:index + 1];
+    }
+    
+    int offset = index * self.scrollView.frame.size.width;
+    CGRect target = CGRectMake(offset, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    [self.scrollView scrollRectToVisible:target animated:animated];
+}
 
 - (void)askForRatingIfNeeded
 {
@@ -31,7 +97,7 @@
     
     NSMutableArray *inWindow = [NSMutableArray array];
     
-    for (int index = self.total - 1; index >= 0; index--) {
+    for (int index = [self getTotalMeals] - 1; index >= 0; index--) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
         Meal *meal = [fetchedResultsController  objectAtIndexPath:path];
         
@@ -58,12 +124,7 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{    
-    [self askForRatingIfNeeded];
-}
-
-- (int)total
+- (int)getTotalMeals
 {
     NSLog(@"GalleryViewController:getTotal");
     id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:0];
@@ -105,6 +166,10 @@
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
+    if (type == NSFetchedResultsChangeInsert) {
+        [self setupContentSizeAndCamera];
+    }
+       
     NSLog(@"GalleryViewController:didChangeObject - %d", type);
 }
 
@@ -113,98 +178,20 @@
     NSLog(@"GalleryViewController:controllerDidChangeContent");
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
-{
-    NSLog(@"GalleryViewController:viewControllerBeforeViewController");
-    
-    MealViewController *result;
-    int index;         
-    
-    if (viewController == cameraViewController) {
-        result = mealViewController1;
-        index = self.total - 1;
-    }
-    else {
-        if (viewController == mealViewController1) {
-            result = mealViewController2;
-        }
-        else {
-            result = mealViewController1;
-        }
-        MealViewController *mvc = (MealViewController *)viewController;
-        Meal *meal = mvc.model;
-        index = [fetchedResultsController indexPathForObject:meal].row;
-        index--;
-    }
-    
-    if (index >= 0) {
-        NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
-        id model = [fetchedResultsController objectAtIndexPath:path];
-        result.model = model;
-    }
-    else {
-        result = nil;
-    }
-    
-    return result;
-}
-
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
-{
-    NSLog(@"GalleryViewController:viewControllerAfterViewController");
-    
-    UIViewController *result;
-    int index;
-    
-    if (viewController == cameraViewController) result = nil;
-    else {
-        if (viewController == mealViewController1) {
-            result = mealViewController2;
-        }
-        else {
-            result = mealViewController1;
-        }
-        MealViewController *mvc = (MealViewController *)viewController;
-        Meal *meal = mvc.model;
-        index = [fetchedResultsController indexPathForObject:meal].row;
-        index++;
-    
-        if (index >= self.total) {
-            result = cameraViewController;
-        }
-        else
-        {
-            NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
-            id model = [fetchedResultsController objectAtIndexPath:path];
-            ((MealViewController *)result).model = model;
-        }
-    }
-       
-    return result;
-}
-
-- (void)flipToCamera
+- (void)flipToCamera:(BOOL)animated
 {
     NSLog(@"GalleryViewController:flipToCamera");    
-    UIViewController *controller = [pageViewController.viewControllers objectAtIndex:0];
-
-    if (controller != cameraViewController) {
-        NSArray *viewControllers = [NSArray arrayWithObjects:cameraViewController, nil];
-        [pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
-    }
+    [self moveToIndex:[self getTotalMeals] animated:animated];
 }
 
-- (void)flipToLastImage
+- (void)flipToLastImage:(BOOL)animated
 {
     NSLog(@"GalleryViewController:flipToLastImage");
-    int index = self.total - 1;
-    NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
-    Meal *meal = (Meal *)[fetchedResultsController objectAtIndexPath:path];
-    mealViewController1.model = meal;
-    
-    NSArray *viewControllers = [NSArray arrayWithObjects:mealViewController1, nil];
-    [pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionReverse animated:YES completion:NULL];
-   
+
+    int totalMeals = [self getTotalMeals];
+    if (totalMeals > 0) {
+        [self moveToIndex:totalMeals - 1 animated:animated];
+    }
 }
 
 - (void)applicationDidBecomeActive
@@ -215,45 +202,84 @@
 
 - (void)applicationWillResignActive
 {
-    [self flipToCamera];
+    [self flipToCamera:NO];
 }
 
 #pragma mark - View lifecycle
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self flipToCamera:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{    
+    [super viewDidAppear:animated];
+    
+    [self askForRatingIfNeeded];
+}
+
+- (void)setupContentSizeAndCamera
+{
+    int totalMeals = [self getTotalMeals];
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * (totalMeals + 1), self.scrollView.frame.size.height);
+
+    CGRect rect;
+    rect = cameraViewController.view.frame;
+    rect.origin.y = 0;
+    rect.origin.x = rect.size.width * totalMeals;
+    cameraViewController.view.frame = rect;
+    
+    [self flipToCamera:NO];
+}
+
 - (void)viewDidLoad 
 {
-    NSLog(@"GalleryViewController:viewDidLoad");
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
  
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];  
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];  
     
+    [self initFetchedResultsController];
+
     cameraViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"CameraViewController"];
     cameraViewController.managedObjectContext = self.managedObjectContext;
     cameraViewController.galleryViewController = self;
     
-    mealViewController1 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
-    mealViewController2 = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
+    [self setupContentSizeAndCamera];
+    [self.scrollView addSubview:cameraViewController.view];
+    [self addChildViewController:cameraViewController];
+
     
-    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
-    self.pageViewController.view.bounds = self.view.bounds;
-    
-    self.pageViewController.dataSource = self;
-    self.pageViewController.delegate = self;
-    
-    NSArray *pageViewControllers = [NSArray arrayWithObjects:cameraViewController, nil];
-    [pageViewController setViewControllers:pageViewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:NULL];
-    
-    [self addChildViewController:pageViewController];
-    [self.view addSubview:pageViewController.view];
-    [self initFetchedResultsController];
+    mealViewControllers = [NSMutableArray array];
+    for (int index = 0; index < CACHED_MEAL_VIEW_CONTROLLERS; index++) {
+        MealViewController *mealViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:NULL] instantiateViewControllerWithIdentifier:@"MealViewController"];
+        [mealViewControllers addObject:mealViewController];
+
+        // initialing views offscreen first
+        CGRect rect;
+        rect = self.scrollView.frame;
+        rect.origin.y = rect.size.height;
+        mealViewController.view.frame = rect;
+        
+        [self.scrollView addSubview:mealViewController.view];
+        [self addChildViewController:mealViewController];
+    }
+     
+    self.currentIndex = 0;
+   
+    [super viewDidLoad];
 }
 
 - (void)viewDidUnload
 {
-    [self setPageViewController:nil];
+    [self setScrollView:nil];
     [self setCameraViewController:nil];
-    [self setMealViewController1:nil];
-    [self setMealViewController2:nil];
+    [self setMealViewControllers:nil];
     [self setAppDelegate:nil];
 
     [self setManagedObjectContext:nil];
@@ -261,6 +287,7 @@
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
+    [self setScrollView:nil];
     [super viewDidUnload];
 }
 

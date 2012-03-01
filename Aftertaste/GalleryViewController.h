@@ -12,21 +12,28 @@
 @class MealViewController;
 @class AppDelegate;
 
-@interface GalleryViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate, NSFetchedResultsControllerDelegate>
+@interface GalleryViewController : UIViewController <UIScrollViewDelegate, NSFetchedResultsControllerDelegate>
 
-@property (strong, nonatomic) UIPageViewController *pageViewController;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
 @property (nonatomic, strong) CameraViewController *cameraViewController;
-@property (nonatomic, strong) MealViewController *mealViewController1;
-@property (nonatomic, strong) MealViewController *mealViewController2;
+@property (nonatomic, strong) NSMutableArray *mealViewControllers;
 @property (nonatomic, strong) AppDelegate *appDelegate;
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, readonly) int total;
+
+@property (nonatomic) int currentIndex;
+
+- (int)getTotalMeals;
 
 - (void)applicationDidBecomeActive;
 - (void)applicationWillResignActive;
-- (void)flipToCamera;
-- (void)flipToLastImage;
+- (void)flipToCamera:(BOOL)animated;
+- (void)flipToLastImage:(BOOL)animated;
+
+- (void)setupContentSizeAndCamera;
+- (void)setUpForIndex:(int)index previousIndex:(int)previousIndex;
+- (void)moveToIndex:(int)index animated:(BOOL)animated;
 
 @end

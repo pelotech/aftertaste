@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F92D90C914FDA325003CD8A6 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D90C814FDA325003CD8A6 /* Constants.m */; };
 		F9CB1A7414FC58AD00B93D96 /* RateMealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CB1A7314FC58AD00B93D96 /* RateMealViewController.m */; };
 		F9E0013014F9904A00E62366 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E0012F14F9904A00E62366 /* UIKit.framework */; };
 		F9E0013214F9904A00E62366 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E0013114F9904A00E62366 /* Foundation.framework */; };
@@ -40,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F92D90C714FDA325003CD8A6 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		F92D90C814FDA325003CD8A6 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		F9CB1A7214FC58AD00B93D96 /* RateMealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RateMealViewController.h; sourceTree = "<group>"; };
 		F9CB1A7314FC58AD00B93D96 /* RateMealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RateMealViewController.m; sourceTree = "<group>"; };
 		F9E0012B14F9904A00E62366 /* Aftertaste.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aftertaste.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,6 +134,8 @@
 		F9E0013714F9904A00E62366 /* Aftertaste */ = {
 			isa = PBXGroup;
 			children = (
+				F92D90C714FDA325003CD8A6 /* Constants.h */,
+				F92D90C814FDA325003CD8A6 /* Constants.m */,
 				F9E0014014F9904A00E62366 /* AppDelegate.h */,
 				F9E0014114F9904A00E62366 /* AppDelegate.m */,
 				F9E0014314F9904A00E62366 /* MainStoryboard.storyboard */,
@@ -303,6 +308,7 @@
 				F9E0017B14F9A11E00E62366 /* MealViewController.m in Sources */,
 				F9E0017E14F9A1D600E62366 /* CameraViewController.m in Sources */,
 				F9CB1A7414FC58AD00B93D96 /* RateMealViewController.m in Sources */,
+				F92D90C914FDA325003CD8A6 /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
