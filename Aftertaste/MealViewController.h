@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *background;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeTakenLabel;
 
 @property (nonatomic, retain) AppDelegate *appDelegate;
 @property (nonatomic, retain) Meal *model;

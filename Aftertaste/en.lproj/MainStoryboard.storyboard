@@ -17,6 +17,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="12:56pm 12/5 " textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="Y5v-WF-1WM">
+                                <rect key="frame" x="10" y="440" width="118" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Rating: 5" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="GYN-j5-7yH">
                                 <rect key="frame" x="220" y="440" width="90" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -32,6 +40,7 @@
                     <connections>
                         <outlet property="background" destination="L4Y-aa-Ckm" id="737-mu-7hu"/>
                         <outlet property="ratingLabel" destination="GYN-j5-7yH" id="pys-vE-k1J"/>
+                        <outlet property="timeTakenLabel" destination="Y5v-WF-1WM" id="irO-gb-QhD"/>
                     </connections>
                 </viewController>
             </objects>
@@ -155,6 +164,7 @@
             <relationships>
                 <relationship kind="outlet" name="background" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="ratingLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timeTakenLabel" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="RateMealViewController" superclassName="UIViewController">

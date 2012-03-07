@@ -74,7 +74,7 @@
     }
     
     notification.fireDate = [AppDelegate offsetDate:date byHours:2];
-    notification.timeZone = [NSTimeZone defaultTimeZone];
+    notification.timeZone = [NSTimeZone localTimeZone];
     
     notification.alertBody = @"You ate two hours ago - rate how you feel now!";
     notification.alertAction = @"Rate!";

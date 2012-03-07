@@ -110,21 +110,15 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
             [inWindow addObject:meal];
         }
     }
-//    NSIndexPath *path = [NSIndexPath indexPathForRow:[self getTotalMeals] - 1 inSection:0];
-//    
-//    [inWindow addObject:[fetchedResultsController objectAtIndexPath:path]];
     
     if ([inWindow count] > 0) {
         RateMealViewController *rateMealViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"RateMealViewController"];
         rateMealViewController.handler = ^(int rating) {
-            NSLog(@"inWindow has %d elements", [inWindow count]);
             [inWindow enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSLog(@"In iteration block - setting rating to %d", rating);
                 Meal* meal = (Meal *)obj;
-                NSLog(@"Meal is %@", meal);
                 meal.rating = [NSNumber numberWithInt:rating];
+                meal.lastUpdated = [NSDate date];
             }];
-            NSLog(@"appDelegate is %@", appDelegate);
             [appDelegate saveContext];
         };
         

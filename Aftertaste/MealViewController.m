@@ -15,6 +15,7 @@
 @synthesize model = _model;
 @synthesize background = _background;
 @synthesize ratingLabel = _ratingLabel;
+@synthesize timeTakenLabel = _timeTakenLabel;
 @synthesize appDelegate;
 
 - (void)loadImage:(NSString *)filename
@@ -28,6 +29,57 @@
     self.background.image = image;
 }
 
++ (void)setTextAndSizeLabel:(UILabel *)label forText:(NSString *)text
+{
+    CGFloat maxWidth = 220 - 20;
+    CGFloat maxHeight = 480;
+    CGSize maximumLabelSize = CGSizeMake(maxWidth, maxHeight);
+    
+    CGSize expectedLabelSize = [text sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeWordWrap]; 
+
+    CGRect frame = label.frame;
+    
+    expectedLabelSize.width += 20;
+    expectedLabelSize.height = frame.size.height;
+    
+    frame.size = expectedLabelSize;
+    label.frame = frame;
+    
+    label.text = text;
+}
+
++ (void)ensureViewHas10PixelGutters:(UIView *)view insideParent:(UIView *)parent
+{
+    CGRect frame = view.frame;
+    CGRect parentFrame = parent.frame;
+    
+    if (frame.origin.x < 10) {
+        frame.origin.x = 10;
+    }
+    if (frame.origin.y < 10) {
+        frame.origin.y = 10;
+    }
+    if (frame.origin.x + frame.size.width > parentFrame.size.width - 10) {
+        frame.size.width = parentFrame.size.width - 10 - frame.origin.x;
+    }
+    if (frame.origin.y + frame.size.height > parentFrame.size.height - 10) {
+        frame.size.height = parentFrame.size.height - 10 - frame.origin.y;
+    }
+    
+    view.frame = frame;
+}
+
++ (void)moveViewToBottomRight:(UIView *)view insideParent:(UIView *)parent
+{
+    CGRect frame = view.frame;
+    CGRect parentFrame = parent.frame;
+    
+    frame.size.width = parentFrame.size.width - 10 - frame.origin.x;
+    frame.size.height = parentFrame.size.height - 10 - frame.origin.y;
+    
+    view.frame = frame;
+}
+
 - (void)setModel:(Meal *)value
 {
 #if DEBUG
@@ -36,14 +88,24 @@
 
     [self loadImage:value.photo];
 
-    NSLog(@"rating: %@", value.rating);
     if ([value.rating intValue] > 0) {
         self.ratingLabel.hidden = NO;
-        self.ratingLabel.text = [NSString stringWithFormat:@"Rating: %@", value.rating];
+        NSString *text = [NSString stringWithFormat:@"Rating: %@", value.rating];
+        [MealViewController setTextAndSizeLabel:self.ratingLabel forText:text];
+        [MealViewController moveViewToBottomRight:self.ratingLabel insideParent:self.view];
     }
     else {
         self.ratingLabel.hidden = YES;
     }
+   
+#if DEBUG
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"d MMM, h:mma";
+    NSString *text = [dateFormat stringFromDate:value.timeStamp];
+    [MealViewController setTextAndSizeLabel:self.timeTakenLabel forText:text];
+#else
+    self.timeTakenLabel.hidden = YES;
+#endif    
     
     _model = value;
 }
@@ -76,6 +138,7 @@
 #endif
     
     [self setRatingLabel:nil];
+    [self setTimeTakenLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
