@@ -13,7 +13,8 @@
 
 @interface MealViewController : UIViewController
 
-@property (nonatomic, weak) UIImageView *background;
+@property (weak, nonatomic) IBOutlet UIImageView *background;
+@property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 
 @property (nonatomic, retain) AppDelegate *appDelegate;
 @property (nonatomic, retain) Meal *model;

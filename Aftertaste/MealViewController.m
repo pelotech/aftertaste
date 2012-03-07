@@ -14,12 +14,15 @@
 
 @synthesize model = _model;
 @synthesize background = _background;
+@synthesize ratingLabel = _ratingLabel;
 @synthesize appDelegate;
 
 - (void)loadImage:(NSString *)filename
 {
+#if DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
-
+#endif
+    
     NSString *path = [[[appDelegate applicationDocumentsDirectory] path] stringByAppendingPathComponent:filename];
     UIImage *image = [UIImage imageWithContentsOfFile:path];
     self.background.image = image;
@@ -27,17 +30,30 @@
 
 - (void)setModel:(Meal *)value
 {
+#if DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
 
     [self loadImage:value.photo];
+
+    NSLog(@"rating: %@", value.rating);
+    if ([value.rating intValue] > 0) {
+        self.ratingLabel.hidden = NO;
+        self.ratingLabel.text = [NSString stringWithFormat:@"Rating: %@", value.rating];
+    }
+    else {
+        self.ratingLabel.hidden = YES;
+    }
     
     _model = value;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+#if DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    
+#endif
+
     [self loadImage:self.model.photo];
     [super viewWillAppear:animated];
 }
@@ -46,13 +62,20 @@
 
 - (void)viewDidLoad
 {
+#if DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
 
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 - (void)viewDidUnload
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
+    [self setRatingLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

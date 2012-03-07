@@ -85,6 +85,7 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
         [self moveViewToIndex:index + 1];
     }
     
+    currentIndex = index;
     int offset = index * self.scrollView.frame.size.width;
     CGRect target = CGRectMake(offset, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
     [self.scrollView scrollRectToVisible:target animated:animated];
@@ -109,14 +110,21 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
             [inWindow addObject:meal];
         }
     }
+//    NSIndexPath *path = [NSIndexPath indexPathForRow:[self getTotalMeals] - 1 inSection:0];
+//    
+//    [inWindow addObject:[fetchedResultsController objectAtIndexPath:path]];
     
     if ([inWindow count] > 0) {
         RateMealViewController *rateMealViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard"  bundle:NULL] instantiateViewControllerWithIdentifier:@"RateMealViewController"];
         rateMealViewController.handler = ^(int rating) {
+            NSLog(@"inWindow has %d elements", [inWindow count]);
             [inWindow enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSLog(@"In iteration block - setting rating to %d", rating);
                 Meal* meal = (Meal *)obj;
+                NSLog(@"Meal is %@", meal);
                 meal.rating = [NSNumber numberWithInt:rating];
             }];
+            NSLog(@"appDelegate is %@", appDelegate);
             [appDelegate saveContext];
         };
         
@@ -240,7 +248,9 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
 #endif
- 
+
+    appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];  
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];  
     
