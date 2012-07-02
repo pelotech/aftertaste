@@ -19,6 +19,10 @@
 
 - (IBAction)rate:(id)sender
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     if (handler) {
         handler([rateButtons selectedSegmentIndex] + 1);
     }
@@ -28,17 +32,11 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)viewDidUnload
 {
     [self setRateButtons:nil];
+    
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

@@ -21,7 +21,10 @@
 
 + (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)size;
 {
-    NSLog(@"CameraViewController:scaledToSize");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     UIGraphicsBeginImageContext(size);
     
     [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
@@ -34,7 +37,10 @@
 
 - (NSString *)getFilename:(NSDate *)timeStamp
 {
-    NSLog(@"CameraViewController:getFilename");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yMMMd-h.mm.s.'jpeg'";
     
@@ -44,7 +50,10 @@
 
 - (void)saveMeal:(NSString *)filename
 {
-    NSLog(@"CameraViewController:saveMeal");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     Meal *meal = (Meal *)[NSEntityDescription insertNewObjectForEntityForName:@"Meal" inManagedObjectContext:managedObjectContext];
     
     meal.timeStamp = [NSDate date]; 
@@ -55,8 +64,16 @@
 
 - (void)savePhoto:(UIImage *)image toFilename:(NSString *)filename
 {
-    NSLog(@"CameraViewController:savePhoto");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+
+    // saving the full Retina-resolution image
+    screenSize.width *= 2;
+    screenSize.height *= 2;
+    
     UIImage *smallImage = [CameraViewController imageWithImage:image scaledToSize:screenSize];
     NSData *data = UIImageJPEGRepresentation(smallImage, .85);    
     NSString *path = [[[appDelegate applicationDocumentsDirectory] path] stringByAppendingPathComponent:filename];
@@ -65,7 +82,10 @@
 
 - (void)scheduleNotification:(NSDate *)date
 {
-    NSLog(@"CameraViewController:scheduleNotification");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (!notification)
     {
@@ -87,7 +107,10 @@
                   
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSLog(@"CameraViewController:didFinishPickingMediaWithInfo");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     NSString *filename = [self getFilename:[NSDate date]];
     
     [self savePhoto:[info valueForKey:UIImagePickerControllerOriginalImage] toFilename:filename];
@@ -104,7 +127,9 @@
 
 - (IBAction)takePicture:(id)sender
 {
-    NSLog(@"CameraViewController:takePicture");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
     
     #if TARGET_IPHONE_SIMULATOR
         dispatch_async( dispatch_get_main_queue(), ^{
@@ -119,7 +144,10 @@
 
 - (void) viewDidLoad
 {
-    NSLog(@"CameraViewController:viewDidLoad");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
 #ifdef TARGET_IPHONE_SIMULATOR
@@ -132,6 +160,10 @@
 
 - (void)viewDidUnload
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

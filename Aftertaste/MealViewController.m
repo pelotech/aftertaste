@@ -31,6 +31,10 @@
 
 + (void)setTextAndSizeLabel:(UILabel *)label forText:(NSString *)text
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
     CGFloat maxWidth = 220 - 20;
     CGFloat maxHeight = 480;
     CGSize maximumLabelSize = CGSizeMake(maxWidth, maxHeight);
@@ -50,6 +54,10 @@
 
 + (void)ensureViewHas10PixelGutters:(UIView *)view insideParent:(UIView *)parent
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     CGRect frame = view.frame;
     CGRect parentFrame = parent.frame;
     
@@ -71,6 +79,10 @@
 
 + (void)moveViewToBottomRight:(UIView *)view insideParent:(UIView *)parent
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
     CGRect frame = view.frame;
     CGRect parentFrame = parent.frame;
     

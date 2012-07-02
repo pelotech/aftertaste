@@ -73,6 +73,10 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 
 - (void)moveToIndex:(int)index animated:(BOOL)animated
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     if (index - 1 >= 0) {
         [self moveViewToIndex:index - 1];
     }
@@ -93,6 +97,10 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 
 - (void)askForRatingIfNeeded
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     NSDate *end = [AppDelegate offsetDate:[NSDate date] byHours:-2];
     NSDate *begin = [AppDelegate offsetDate:end byMinutes:-15];
     
@@ -128,14 +136,19 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 
 - (int)getTotalMeals
 {
-    NSLog(@"GalleryViewController:getTotal");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:0];
     return [sectionInfo numberOfObjects];
 }
 
 - (void)initFetchedResultsController
 {
-    NSLog(@"GalleryViewController:initFetchedResultsController");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Meal" inManagedObjectContext:self.managedObjectContext];
@@ -158,37 +171,50 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    NSLog(@"GalleryViewController:controllerWillChangeContent");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
-    NSLog(@"GalleryViewController:didChangeSection - %d", type);
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     if (type == NSFetchedResultsChangeInsert) {
         [self setupContentSizeAndCamera];
     }
-       
-    NSLog(@"GalleryViewController:didChangeObject - %d", type);
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    NSLog(@"GalleryViewController:controllerDidChangeContent");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
 }
 
 - (void)flipToCamera:(BOOL)animated
 {
-    NSLog(@"GalleryViewController:flipToCamera");    
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     [self moveToIndex:[self getTotalMeals] animated:animated];
 }
 
 - (void)flipToLastImage:(BOOL)animated
 {
-    NSLog(@"GalleryViewController:flipToLastImage");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
 
     int totalMeals = [self getTotalMeals];
     if (totalMeals > 0) {
@@ -198,7 +224,10 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 
 - (void)applicationDidBecomeActive
 {
-    NSLog(@"GalleryViewController:applicationDidBecomeActive");
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     [self askForRatingIfNeeded];
 }
 
@@ -211,6 +240,10 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     [super viewWillAppear:animated];
     
     [self flipToCamera:NO];
@@ -218,6 +251,10 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 
 - (void)viewDidAppear:(BOOL)animated
 {    
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     [super viewDidAppear:animated];
     
     [self askForRatingIfNeeded];
@@ -225,6 +262,10 @@ int CACHED_MEAL_VIEW_CONTROLLERS = 3;
 
 - (void)setupContentSizeAndCamera
 {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+
     int totalMeals = [self getTotalMeals];
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * (totalMeals + 1), self.scrollView.frame.size.height);
 
