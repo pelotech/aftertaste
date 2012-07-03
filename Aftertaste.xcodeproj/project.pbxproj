@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ADB6AA0E15A26259000D9FD2 /* AVCamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB6AA0715A26259000D9FD2 /* AVCamViewController.m */; };
+		ADB6AA0F15A26259000D9FD2 /* AVCamCaptureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB6AA0915A26259000D9FD2 /* AVCamCaptureManager.m */; };
+		ADB6AA1015A26259000D9FD2 /* AVCamRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB6AA0B15A26259000D9FD2 /* AVCamRecorder.m */; };
+		ADB6AA1115A26259000D9FD2 /* AVCamUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB6AA0D15A26259000D9FD2 /* AVCamUtilities.m */; };
+		ADB6AA2915A2639B000D9FD2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB6AA2815A2639B000D9FD2 /* AVFoundation.framework */; };
+		ADB6AA2B15A263B1000D9FD2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB6AA2A15A263B1000D9FD2 /* QuartzCore.framework */; };
+		ADB6AA2D15A263B8000D9FD2 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB6AA2C15A263B8000D9FD2 /* MediaPlayer.framework */; };
+		ADB6AA2F15A263BF000D9FD2 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB6AA2E15A263BF000D9FD2 /* CoreMedia.framework */; };
+		ADB6AA3115A263C6000D9FD2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB6AA3015A263C6000D9FD2 /* CoreVideo.framework */; };
+		ADB6AA3315A263D0000D9FD2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB6AA3215A263D0000D9FD2 /* MobileCoreServices.framework */; };
+		ADB6AA3515A263DA000D9FD2 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB6AA3415A263DA000D9FD2 /* AssetsLibrary.framework */; };
+		ADB6AA3715A263E1000D9FD2 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB6AA3615A263E1000D9FD2 /* ImageIO.framework */; };
 		F92D90C914FDA325003CD8A6 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F92D90C814FDA325003CD8A6 /* Constants.m */; };
 		F9CB1A7414FC58AD00B93D96 /* RateMealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CB1A7314FC58AD00B93D96 /* RateMealViewController.m */; };
 		F9E0013014F9904A00E62366 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E0012F14F9904A00E62366 /* UIKit.framework */; };
@@ -41,6 +53,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		ADB6AA0615A26259000D9FD2 /* AVCamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamViewController.h; sourceTree = "<group>"; };
+		ADB6AA0715A26259000D9FD2 /* AVCamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamViewController.m; sourceTree = "<group>"; };
+		ADB6AA0815A26259000D9FD2 /* AVCamCaptureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamCaptureManager.h; sourceTree = "<group>"; };
+		ADB6AA0915A26259000D9FD2 /* AVCamCaptureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamCaptureManager.m; sourceTree = "<group>"; };
+		ADB6AA0A15A26259000D9FD2 /* AVCamRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamRecorder.h; sourceTree = "<group>"; };
+		ADB6AA0B15A26259000D9FD2 /* AVCamRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamRecorder.m; sourceTree = "<group>"; };
+		ADB6AA0C15A26259000D9FD2 /* AVCamUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamUtilities.h; sourceTree = "<group>"; };
+		ADB6AA0D15A26259000D9FD2 /* AVCamUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamUtilities.m; sourceTree = "<group>"; };
+		ADB6AA2815A2639B000D9FD2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		ADB6AA2A15A263B1000D9FD2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		ADB6AA2C15A263B8000D9FD2 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		ADB6AA2E15A263BF000D9FD2 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		ADB6AA3015A263C6000D9FD2 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		ADB6AA3215A263D0000D9FD2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		ADB6AA3415A263DA000D9FD2 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		ADB6AA3615A263E1000D9FD2 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		F92D90C714FDA325003CD8A6 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		F92D90C814FDA325003CD8A6 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		F9CB1A7214FC58AD00B93D96 /* RateMealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RateMealViewController.h; sourceTree = "<group>"; };
@@ -79,6 +107,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADB6AA3715A263E1000D9FD2 /* ImageIO.framework in Frameworks */,
+				ADB6AA3515A263DA000D9FD2 /* AssetsLibrary.framework in Frameworks */,
+				ADB6AA3315A263D0000D9FD2 /* MobileCoreServices.framework in Frameworks */,
+				ADB6AA3115A263C6000D9FD2 /* CoreVideo.framework in Frameworks */,
+				ADB6AA2F15A263BF000D9FD2 /* CoreMedia.framework in Frameworks */,
+				ADB6AA2D15A263B8000D9FD2 /* MediaPlayer.framework in Frameworks */,
+				ADB6AA2B15A263B1000D9FD2 /* QuartzCore.framework in Frameworks */,
+				ADB6AA2915A2639B000D9FD2 /* AVFoundation.framework in Frameworks */,
 				F9E0013014F9904A00E62366 /* UIKit.framework in Frameworks */,
 				F9E0013214F9904A00E62366 /* Foundation.framework in Frameworks */,
 				F9E0013414F9904A00E62366 /* CoreGraphics.framework in Frameworks */,
@@ -100,6 +136,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		ADB6AA0415A26242000D9FD2 /* AV */ = {
+			isa = PBXGroup;
+			children = (
+				ADB6AA0615A26259000D9FD2 /* AVCamViewController.h */,
+				ADB6AA0715A26259000D9FD2 /* AVCamViewController.m */,
+				ADB6AA0815A26259000D9FD2 /* AVCamCaptureManager.h */,
+				ADB6AA0915A26259000D9FD2 /* AVCamCaptureManager.m */,
+				ADB6AA0A15A26259000D9FD2 /* AVCamRecorder.h */,
+				ADB6AA0B15A26259000D9FD2 /* AVCamRecorder.m */,
+				ADB6AA0C15A26259000D9FD2 /* AVCamUtilities.h */,
+				ADB6AA0D15A26259000D9FD2 /* AVCamUtilities.m */,
+			);
+			name = AV;
+			sourceTree = "<group>";
+		};
 		F9E0012014F9904900E62366 = {
 			isa = PBXGroup;
 			children = (
@@ -122,6 +173,14 @@
 		F9E0012E14F9904A00E62366 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				ADB6AA3615A263E1000D9FD2 /* ImageIO.framework */,
+				ADB6AA3415A263DA000D9FD2 /* AssetsLibrary.framework */,
+				ADB6AA3215A263D0000D9FD2 /* MobileCoreServices.framework */,
+				ADB6AA3015A263C6000D9FD2 /* CoreVideo.framework */,
+				ADB6AA2E15A263BF000D9FD2 /* CoreMedia.framework */,
+				ADB6AA2C15A263B8000D9FD2 /* MediaPlayer.framework */,
+				ADB6AA2A15A263B1000D9FD2 /* QuartzCore.framework */,
+				ADB6AA2815A2639B000D9FD2 /* AVFoundation.framework */,
 				F9E0012F14F9904A00E62366 /* UIKit.framework */,
 				F9E0013114F9904A00E62366 /* Foundation.framework */,
 				F9E0013314F9904A00E62366 /* CoreGraphics.framework */,
@@ -134,6 +193,7 @@
 		F9E0013714F9904A00E62366 /* Aftertaste */ = {
 			isa = PBXGroup;
 			children = (
+				ADB6AA0415A26242000D9FD2 /* AV */,
 				F92D90C714FDA325003CD8A6 /* Constants.h */,
 				F92D90C814FDA325003CD8A6 /* Constants.m */,
 				F9E0014014F9904A00E62366 /* AppDelegate.h */,
@@ -309,6 +369,10 @@
 				F9E0017E14F9A1D600E62366 /* CameraViewController.m in Sources */,
 				F9CB1A7414FC58AD00B93D96 /* RateMealViewController.m in Sources */,
 				F92D90C914FDA325003CD8A6 /* Constants.m in Sources */,
+				ADB6AA0E15A26259000D9FD2 /* AVCamViewController.m in Sources */,
+				ADB6AA0F15A26259000D9FD2 /* AVCamCaptureManager.m in Sources */,
+				ADB6AA1015A26259000D9FD2 /* AVCamRecorder.m in Sources */,
+				ADB6AA1115A26259000D9FD2 /* AVCamUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +476,10 @@
 		F9E0016814F9904A00E62366 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Aftertaste/Aftertaste-Prefix.pch";
 				INFOPLIST_FILE = "Aftertaste/Aftertaste-Info.plist";
@@ -423,6 +491,10 @@
 		F9E0016914F9904A00E62366 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Aftertaste/Aftertaste-Prefix.pch";
 				INFOPLIST_FILE = "Aftertaste/Aftertaste-Info.plist";

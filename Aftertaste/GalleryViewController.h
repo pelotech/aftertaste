@@ -11,12 +11,13 @@
 @class CameraViewController;
 @class MealViewController;
 @class AppDelegate;
+@class AVCamViewController;
 
 @interface GalleryViewController : UIViewController <UIScrollViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
-@property (nonatomic, strong) CameraViewController *cameraViewController;
+@property (nonatomic, strong) AVCamViewController *cameraViewController;
 @property (nonatomic, strong) NSMutableArray *mealViewControllers;
 @property (nonatomic, strong) AppDelegate *appDelegate;
 

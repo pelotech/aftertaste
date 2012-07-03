@@ -8,7 +8,7 @@
 
 #import "GalleryViewController.h"
 #import "MealViewController.h"
-#import "CameraViewController.h"
+#import "AVCamViewController.h"
 #import "AppDelegate.h"
 #import "RateMealViewController.h"
 #import "Meal.h"
