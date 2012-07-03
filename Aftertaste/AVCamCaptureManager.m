@@ -51,6 +51,8 @@
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <ImageIO/CGImageProperties.h>
+#import "AppDelegate.h"
+#import "Meal.h"
 
 @interface AVCamCaptureManager (RecorderDelegate) <AVCamRecorderDelegate>
 @end
@@ -71,6 +73,7 @@
 #pragma mark -
 @implementation AVCamCaptureManager
 
+@synthesize managedObjectContext;
 @synthesize session;
 @synthesize orientation;
 @synthesize videoInput;
@@ -81,11 +84,14 @@
 @synthesize deviceDisconnectedObserver;
 @synthesize backgroundRecordingID;
 @synthesize delegate;
+@synthesize appDelegate;
 
 - (id) init
 {
     self = [super init];
     if (self != nil) {
+        appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        
 		__block id weakSelf = self;
         void (^deviceConnectedBlock)(NSNotification *) = ^(NSNotification *notification) {
 			AVCaptureDevice *device = [notification object];
@@ -142,19 +148,8 @@
 		[notificationCenter addObserver:self selector:@selector(deviceOrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
 		orientation = AVCaptureVideoOrientationPortrait;
     }
-    
-    return self;
-}
 
-- (void) dealloc
-{
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:[self deviceConnectedObserver]];
-    [notificationCenter removeObserver:[self deviceDisconnectedObserver]];
-	[notificationCenter removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    
-    [[self session] stopRunning];
+    return self;
 }
 
 - (BOOL) setupSession
@@ -256,39 +251,131 @@
     [[self recorder] stopRecording];
 }
 
+- (void)scheduleNotification:(NSDate *)date
+{
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    if (!notification)
+    {
+        NSLog(@"AppDelegate::scheduleReminders: Couldn't create a local notification");
+        return;
+    }
+    
+    notification.fireDate = [AppDelegate offsetDate:date byHours:2];
+    notification.timeZone = [NSTimeZone localTimeZone];
+    
+    notification.alertBody = @"You ate two hours ago - rate how you feel now!";
+    notification.alertAction = @"Rate!";
+    
+    notification.soundName = UILocalNotificationDefaultSoundName;
+    notification.applicationIconBadgeNumber = 1;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];            
+}
+
++ (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)size;
+{
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
+    UIGraphicsBeginImageContext(size);
+    
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return result;
+}
+
+- (NSString *)getFilename:(NSDate *)timeStamp
+{
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yMMMd-h.mm.s.'jpeg'";
+    
+    NSString *filename = [dateFormat stringFromDate:timeStamp];
+    return filename;
+}
+
+- (void)savePhoto:(UIImage *)image toFilename:(NSString *)filename
+{
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    
+    // saving the full Retina-resolution image
+    screenSize.width *= 2;
+    screenSize.height *= 2;
+    
+    UIImage *smallImage = [AVCamCaptureManager imageWithImage:image scaledToSize:screenSize];
+    NSData *data = UIImageJPEGRepresentation(smallImage, .85);    
+    NSString *path = [[[appDelegate applicationDocumentsDirectory] path] stringByAppendingPathComponent:filename];
+    [data writeToFile:path atomically:YES];  
+}
+
+- (void)saveMeal:(NSString *)filename
+{
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    managedObjectContext = appDelegate.managedObjectContext;
+    Meal *meal = (Meal *)[NSEntityDescription insertNewObjectForEntityForName:@"Meal" inManagedObjectContext:managedObjectContext];
+    
+    meal.timeStamp = [NSDate date]; 
+    meal.photo = filename;  
+    
+    [appDelegate saveContext];
+}
+
 - (void) captureStillImage
 {
     AVCaptureConnection *stillImageConnection = [AVCamUtilities connectionWithMediaType:AVMediaTypeVideo fromConnections:[[self stillImageOutput] connections]];
     if ([stillImageConnection isVideoOrientationSupported])
         [stillImageConnection setVideoOrientation:orientation];
-    
     [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:stillImageConnection
-                                                         completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
-															 
-															 ALAssetsLibraryWriteImageCompletionBlock completionBlock = ^(NSURL *assetURL, NSError *error) {
-																 if (error) {
-                                                                     if ([[self delegate] respondsToSelector:@selector(captureManager:didFailWithError:)]) {
-                                                                         [[self delegate] captureManager:self didFailWithError:error];
-                                                                         }
-																 }
-															 };
-															 
-															 if (imageDataSampleBuffer != NULL) {
-																 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-																 ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-																 
-                                                                 UIImage *image = [[UIImage alloc] initWithData:imageData];
-																 [library writeImageToSavedPhotosAlbum:[image CGImage]
-																						   orientation:(ALAssetOrientation)[image imageOrientation]
-																					   completionBlock:completionBlock];
-															 }
-															 else
-																 completionBlock(nil, error);
-															 
-															 if ([[self delegate] respondsToSelector:@selector(captureManagerStillImageCaptured:)]) {
-																 [[self delegate] captureManagerStillImageCaptured:self];
-															 }
-                                                         }];
+        completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) 
+{
+         ALAssetsLibraryWriteImageCompletionBlock completionBlock = ^(NSURL *assetURL, NSError *error) {
+             if (error) {
+                 if ([[self delegate] respondsToSelector:@selector(captureManager:didFailWithError:)]) {
+                     [[self delegate] captureManager:self didFailWithError:error];
+                     }
+             }
+         };
+         
+         if (imageDataSampleBuffer != NULL) {
+             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+//             ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+             
+             UIImage *image = [[UIImage alloc] initWithData:imageData];
+             
+             NSString *filename = [self getFilename:[NSDate date]];
+             
+             [self savePhoto:image toFilename:filename];
+             [self saveMeal:filename];
+             [self scheduleNotification:[NSDate date]];
+             
+//             [library writeImageToSavedPhotosAlbum:[image CGImage]
+//                                       orientation:(ALAssetOrientation)[image imageOrientation]
+//                                   completionBlock:completionBlock];
+         }
+         else
+             completionBlock(nil, error);
+         
+         if ([[self delegate] respondsToSelector:@selector(captureManagerStillImageCaptured:)]) {
+             [[self delegate] captureManagerStillImageCaptured:self];
+         }
+     }];
 }
 
 // Toggle between the front and back camera, if both are present.

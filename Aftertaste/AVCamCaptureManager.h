@@ -48,7 +48,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
-@class AVCamRecorder;
+@class AVCamRecorder, AppDelegate;
 @protocol AVCamCaptureManagerDelegate;
 
 @interface AVCamCaptureManager : NSObject {
@@ -64,6 +64,12 @@
 @property (nonatomic,assign) id deviceDisconnectedObserver;
 @property (nonatomic,assign) UIBackgroundTaskIdentifier backgroundRecordingID;
 @property (nonatomic,assign) id <AVCamCaptureManagerDelegate> delegate;
+@property (nonatomic, strong) AppDelegate *appDelegate;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
+- (NSString *)getFilename:(NSDate *)timeStamp;
+- (void)saveMeal:(NSString *)filename;
+- (void)scheduleNotification:(NSDate *)date;
 
 - (BOOL) setupSession;
 - (void) startRecording;
@@ -74,7 +80,6 @@
 - (NSUInteger) micCount;
 - (void) autoFocusAtPoint:(CGPoint)point;
 - (void) continuousFocusAtPoint:(CGPoint)point;
-
 @end
 
 // These delegate methods can be called on any arbitrary thread. If the delegate does something with the UI when called, make sure to send it to the main thread.
